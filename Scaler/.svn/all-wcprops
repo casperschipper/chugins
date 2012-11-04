@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/chuck/!svn/ver/67/branches/prc-levitin/test/dl/Bitcrusher
+END
+Bitcrusher.dsp
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/chuck/!svn/ver/67/branches/prc-levitin/test/dl/Bitcrusher/Bitcrusher.dsp
+END
+Bitcrusher-test.ck
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/chuck/!svn/ver/67/branches/prc-levitin/test/dl/Bitcrusher/Bitcrusher-test.ck
+END
+makefile.osx
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/chuck/!svn/ver/67/branches/prc-levitin/test/dl/Bitcrusher/makefile.osx
+END
+Bitcrusher.dsw
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/chuck/!svn/ver/67/branches/prc-levitin/test/dl/Bitcrusher/Bitcrusher.dsw
+END
+Bitcrusher.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/chuck/!svn/ver/67/branches/prc-levitin/test/dl/Bitcrusher/Bitcrusher.cpp
+END
+makefile.linux
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/chuck/!svn/ver/67/branches/prc-levitin/test/dl/Bitcrusher/makefile.linux
+END
+makefile.win32
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/chuck/!svn/ver/67/branches/prc-levitin/test/dl/Bitcrusher/makefile.win32
+END
