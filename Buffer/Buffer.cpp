@@ -68,8 +68,8 @@ struct bufferData
     float * buffer; // pointer to delayline
     int max; // maxsize of delay
     int wPos; // the current writing position
-    int interp;
-    int sync;
+    int interp; // type of interpolation
+    int sync; // type of connection to previous unit
     float readPos; // readposition
     float rate; // playback rate
     float frequency;
@@ -135,9 +135,9 @@ CK_DLL_QUERY(buffer)
     QUERY->add_arg(QUERY, "int", "arg"); 
     QUERY->add_mfun(QUERY, buffer_getInterp, "int", "interp"); // 0 = no interpolation, 1 = linear, 2 = cubic spline
 
-    QUERY->add_mfun(QUERY, buffer_delay, "dur", "delay"); // 0 = no interpolation, 1 = linear, 2 = cubic spline
+    QUERY->add_mfun(QUERY, buffer_delay, "dur", "delay"); // duration of buffer ( <= than dur specified at max parameter)
     QUERY->add_arg(QUERY, "dur", "arg"); 
-    QUERY->add_mfun(QUERY, buffer_getDelay, "dur", "delay"); // 0 = no interpolation, 1 = linear, 2 = cubic spline
+    QUERY->add_mfun(QUERY, buffer_getDelay, "dur", "delay"); // 
     
     QUERY->add_mfun(QUERY, buffer_valueAt, "float", "valueAt"); // two arguments location and value
     QUERY->add_arg(QUERY, "int", "index"); 
@@ -202,7 +202,7 @@ CK_DLL_TICK(buffer_tick)
 {
     bufferData * bfdata = (bufferData *) OBJ_MEMBER_INT(SELF, buffer_data_offset);
     
-    if (bfdata->recLeft>0 && bfdata->record && bfdata->sync == 0 || bfdata->sync == 3) {
+    if ((bfdata->recLeft>0 && bfdata->record && (bfdata->sync == 0)) || (bfdata->sync == 3)) {
         bfdata->buffer[bfdata->wPos++] = in; // write a sample if recording is switched on, increase write position.
         bfdata->recLeft--;
     }
@@ -355,7 +355,10 @@ CK_DLL_MFUN(buffer_sync)
 {
     bufferData * bfdata = (bufferData *) OBJ_MEMBER_INT(SELF, buffer_data_offset);
     bfdata->sync = GET_NEXT_INT(ARGS);
-    if (bfdata->sync == 1 || bfdata->sync == 2) { bfdata->record = false; bfdata->recLeft = 0; } // switch of recording if input is used as sync. 
+    if (bfdata->sync == 1 || bfdata->sync == 2) { // switch of recording if input is used as sync.
+        bfdata->record = false;
+        bfdata->recLeft = 0;
+    } 
     if (bfdata->sync == 3) {
         bfdata->recLoop = true;
         bfdata->record = 1;
