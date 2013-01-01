@@ -1,5 +1,5 @@
 
-CHUGINS=ABSaturator Bitcrusher MagicSine
+CHUGINS=ABSaturator Bitcrusher MagicSine Linseg Mtof Tanh Buffer Scaler DelayC Clip
 CHUGS=$(foreach CHUG,$(CHUGINS),$(CHUG)/$(CHUG).chug)
 
 INSTALL_DIR=/usr/lib/chuck
