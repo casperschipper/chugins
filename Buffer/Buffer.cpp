@@ -176,7 +176,7 @@ CK_DLL_CTOR(buffer_ctor) // constructing the Buffer chugin
     bfdata->readPos = 0;                // set readpos to 0
     bfdata->interp = 1;                 // using linear interpolation
     bfdata->play = true;                // playback switched on
-    bfdata->record = true;
+    bfdata->record = false;
     bfdata->loop = true;
     bfdata->recLoop = false;
     bfdata->recLeft = bfdata->max;
