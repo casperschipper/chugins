@@ -2,13 +2,13 @@ Buffer mod => Buffer buf; PanFour p;
 p.connect(buf);
 Step offset => buf;
 
-mod.max(30::samp);
-mod.interp(0);
-mod.record(0);
-mod.noise();
+mod.max(30::samp); // size
+mod.interp(0); // interpolation, 0 none, 1 linear, 2 cubicy
+mod.record(0); // record something from input
+mod.noise(); // fill with white noise
 
-mod.freq(20);
-mod.gain(200);
+mod.freq(20); // use as oscillator, buffer 
+mod.gain(200); // 
 
 offset.next(1*Std.rand2f(0.8,1.2));
 

@@ -60,7 +60,13 @@ CK_DLL_QUERY(scaler)
     QUERY->add_arg(QUERY, "float", "arg");
     
     QUERY->add_mfun(QUERY, scaler_max_out, "void", "maxOut"); // desired maximum of output
-    QUERY->add_arg(QUERY, "float", "arg"); 
+    QUERY->add_arg(QUERY, "float", "arg");
+    
+    QUERY->add_mfun(QUERY, scaler_set_all, "void", "set"); // set all at once
+    QUERY->add_arg(QUERY, "float", "minIn");
+    QUERY->add_arg(QUERY, "float", "maxIn");
+    QUERY->add_arg(QUERY, "float", "minOut");
+    QUERY->add_arg(QUERY, "float", "maxOut");
     
     QUERY->add_mfun(QUERY, scaler_exp, "void", "exp"); // desired maximum of output
     QUERY->add_arg(QUERY, "float", "arg"); 
@@ -144,6 +150,20 @@ CK_DLL_MFUN(scaler_max_out)
     scdata->maxOut = (GET_NEXT_FLOAT(ARGS)); 
     scdata->rangeOut = fabs(scdata->maxOut - scdata->minOut);
 }
+
+CK_DLL_MFUN(scaler_set_all) {
+    scalerData *scdata = (scalerData *) OBJ_MEMBER_INT(SELF, scaler_data_offset);
+    float in1 = (GET_NEXT_FLOAT(ARGS));
+    float in2 = (GET_NEXT_FLOAT(ARGS));
+    float out1 = (GET_NEXT_FLOAT(ARGS));
+    float out2 = (GET_NEXT_FLOAT(ARGS));
+    scdata->minIn = fmin(in1,in2);
+    scdata->maxIn = fmax(in1,in2);
+    scdata->minOut = fmin(out1,out2);
+    scdata->maxOut = fmax(out1,out2);
+    scdata->rangeIn = fabs(scdata->maxIn - scdata->minIn);
+    scdata->rangeOut = fabs(scdata->maxOut - scdata->minOut);
+}
                         
 CK_DLL_MFUN(scaler_exp) {
     scalerData * scdata = (scalerData *) OBJ_MEMBER_INT(SELF, scaler_data_offset);
@@ -151,5 +171,7 @@ CK_DLL_MFUN(scaler_exp) {
     if (value>0) scdata->exp = value;
     else scdata->exp = 1;
 }
+
+
 
 
