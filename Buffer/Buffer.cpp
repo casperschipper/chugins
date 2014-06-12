@@ -7,6 +7,7 @@
 #include <limits.h>
 #include <math.h>
 #include <cstdlib> 
+#include <string.h>
 
 inline int round(float r) {
     return (r > 0.0) ? (int) floor(r + 0.5) : (int) ceil(r - 0.5);
@@ -58,6 +59,7 @@ CK_DLL_MFUN(buffer_getDelay); // delaytime
 CK_DLL_MFUN(buffer_clear); // to clear buffer
 CK_DLL_MFUN(buffer_sinewave); // set sinewave;
 CK_DLL_MFUN(buffer_noise); // set noise;
+CK_DLL_MFUN(buffer_exp); // set to exponential curve
 
 CK_DLL_TICK(buffer_tick); // this is main dsp
 
@@ -148,7 +150,9 @@ CK_DLL_QUERY(buffer)
     QUERY->add_mfun(QUERY, buffer_clear, "void", "clear"); // clears buffer
     
     QUERY->add_mfun(QUERY, buffer_sinewave, "void", "sinewave"); // sets waveform to sinewave
-    QUERY->add_mfun(QUERY, buffer_noise, "void", "noise"); // sets waveform to sinewave
+    QUERY->add_mfun(QUERY, buffer_noise, "void", "noise"); // sets waveform to noise
+    
+    QUERY->add_mfun(QUERY, buffer_exp, "void", "exp"); // sets waveform to an exponential curve going from 0.00001 to 1.
     
     buffer_data_offset = QUERY->add_mvar(QUERY, "int", "@data", false);
     
@@ -172,7 +176,7 @@ CK_DLL_CTOR(buffer_ctor) // constructing the Buffer chugin
     bfdata->readPos = 0;                // set readpos to 0
     bfdata->interp = 1;                 // using linear interpolation
     bfdata->play = true;                // playback switched on
-    bfdata->record = true;
+    bfdata->record = false;
     bfdata->loop = true;
     bfdata->recLoop = false;
     bfdata->recLeft = bfdata->max;
@@ -181,7 +185,7 @@ CK_DLL_CTOR(buffer_ctor) // constructing the Buffer chugin
     if (bfdata->buffer) delete [] bfdata->buffer; // delete if present.
     bfdata->buffer = new float[bfdata->max];      // allocate new memory
     
-    for (int i = 0;i<bfdata->max;i++) bfdata->buffer[i] = 0; // clear the allocated memory
+    memset(bfdata->buffer,0,bfdata->max); // clear the allocated memory
     
     OBJ_MEMBER_INT(SELF, buffer_data_offset) = (t_CKINT) bfdata;
 }
@@ -290,12 +294,18 @@ CK_DLL_MFUN(buffer_noise)
     }
 }
 
-CK_DLL_MFUN(buffer_clear)
+CK_DLL_MFUN(buffer_exp)
 {
     bufferData * bfdata = (bufferData *) OBJ_MEMBER_INT(SELF, buffer_data_offset);
     for (int i = 0; i < bfdata->max; i++) {
-        bfdata->buffer[i] = 0;
+        bfdata->buffer[i] = pow(0.00001, 1.0 - ((float) i / bfdata->max));
     }
+}
+
+CK_DLL_MFUN(buffer_clear)
+{
+    bufferData * bfdata = (bufferData *) OBJ_MEMBER_INT(SELF, buffer_data_offset);
+    memset(bfdata->buffer,0,bfdata->max);
 }
 
 CK_DLL_MFUN(buffer_rate)
