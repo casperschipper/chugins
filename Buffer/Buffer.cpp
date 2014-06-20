@@ -39,6 +39,7 @@ CK_DLL_MFUN(buffer_record); // rec switch
 CK_DLL_MFUN(buffer_loop); // loop playback ?
 CK_DLL_MFUN(buffer_recLoop); // loop rec
 CK_DLL_MFUN(buffer_frequency); // frequency
+CK_DLL_MFUN(buffer_position); // position in buffer
 CK_DLL_MFUN(buffer_delay); // delaytime if sync = 3
 
 // getter functions:
@@ -52,6 +53,7 @@ CK_DLL_MFUN(buffer_getRecord); // rec switch
 CK_DLL_MFUN(buffer_getLoop); // rec switch
 CK_DLL_MFUN(buffer_getRecLoop); // rec switch
 CK_DLL_MFUN(buffer_getFrequency); // frequency
+CK_DLL_MFUN(buffer_getPosition); // position
 CK_DLL_MFUN(buffer_getDelay); // delaytime
 
 
@@ -126,7 +128,11 @@ CK_DLL_QUERY(buffer)
 
     QUERY->add_mfun(QUERY, buffer_frequency, "float", "freq"); // playback speed 
     QUERY->add_arg(QUERY, "float", "arg");
-    QUERY->add_mfun(QUERY, buffer_getFrequency, "float", "freq"); 
+    QUERY->add_mfun(QUERY, buffer_getFrequency, "float", "freq");
+    
+    QUERY->add_mfun(QUERY, buffer_position, "float", "position"); // set playhead position by function.
+    QUERY->add_arg(QUERY, "float", "arg");
+    QUERY->add_mfun(QUERY, buffer_getPosition, "float", "position");
 
     QUERY->add_mfun(QUERY, buffer_sync, "int", "sync"); // 0 = record, 1 = frequency ctrl, 2 = phase ctrl
     QUERY->add_arg(QUERY, "int", "arg");
@@ -328,6 +334,24 @@ CK_DLL_MFUN(buffer_frequency)
     bfdata->rate = (float) ((bfdata->frequency * bfdata->max) / g_srate);
     RETURN->v_float = bfdata->frequency;
 }
+
+CK_DLL_MFUN(buffer_position)
+{
+    bufferData * bfdata = (bufferData *) OBJ_MEMBER_INT(SELF, buffer_data_offset);
+    bfdata->readPos = GET_NEXT_FLOAT(ARGS) % bfdata->max;
+    if (bfdata->readPos < 0) {
+        fprintf(stderr, "Position is negative, set to 0",index);
+        bfdata->readPost = 0;
+    }
+    RETURN->v_float = bfdata->readPos;
+}
+
+CK_DLL_MFUN(buffer_getPosition)
+{
+    bufferData * bfdata = (bufferData *) OBJ_MEMBER_INT(SELF, buffer_data_offset);
+    RETURN->v_float = bfdata->readPos;
+}
+
 
 CK_DLL_MFUN(buffer_getFrequency)
 {
