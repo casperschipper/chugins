@@ -37,7 +37,7 @@ CK_DLL_QUERY(Dust)
     QUERY->add_ugen_func(QUERY, Dust_tick, NULL, 1, 1);
     
     QUERY->add_mfun(QUERY, Dust_setProbability, "float", "p");
-    QUERY->add_arg(QUERY, "int", "arg");
+    QUERY->add_arg(QUERY, "float", "p");
     
     QUERY->add_mfun(QUERY, Dust_getProbability, "float", "p");
     
@@ -77,9 +77,9 @@ CK_DLL_TICK(Dust_tick)
 
     // just add the parameter controlled one, so when no input is connected, probabality can also be set manually.
     // take negative also as probability.
-    SAMPLE probability = abs(probability + dustdata->probability);
+    SAMPLE probability = abs(in) + dustdata->probability;
 
-    *out = (probability < ((float)rand()/RAND_MAX)) ? (((float)rand()/RAND_MAX) * 2.0) - 1.0 : 0.0;
+    *out = ((float)rand()/RAND_MAX) * (probability > ((float)rand()/RAND_MAX));
 
     return TRUE;
 }
@@ -88,7 +88,7 @@ CK_DLL_MFUN(Dust_setProbability)
 {
     DustData * dustdata = (DustData *) OBJ_MEMBER_INT(SELF, Dust_data_offset);
     dustdata->probability = GET_NEXT_FLOAT(ARGS);
-    RETURN->v_float = dustdata->bits;
+    RETURN->v_float = dustdata->probability;
 }
 
 CK_DLL_MFUN(Dust_getProbability)
