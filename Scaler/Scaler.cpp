@@ -15,6 +15,7 @@ CK_DLL_MFUN(scaler_max_in); // Maximum input
 CK_DLL_MFUN(scaler_min_out); // Minimum output
 CK_DLL_MFUN(scaler_max_out); // Maximum output
 CK_DLL_MFUN(scaler_exp); // exponentialness
+CK_DLL_MFUN(scaler_set_all); // set all at once
 
 CK_DLL_TICK(scaler_tick); // this is the main loop
 

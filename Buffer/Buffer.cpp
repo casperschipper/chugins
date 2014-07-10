@@ -338,10 +338,10 @@ CK_DLL_MFUN(buffer_frequency)
 CK_DLL_MFUN(buffer_position)
 {
     bufferData * bfdata = (bufferData *) OBJ_MEMBER_INT(SELF, buffer_data_offset);
-    bfdata->readPos = GET_NEXT_FLOAT(ARGS) % bfdata->max;
+    bfdata->readPos = fmod(GET_NEXT_FLOAT(ARGS),bfdata->max);
     if (bfdata->readPos < 0) {
-        fprintf(stderr, "Position is negative, set to 0",index);
-        bfdata->readPost = 0;
+        fprintf(stderr, "Position %f, set to 0",bfdata->readPos);
+        bfdata->readPos = 0.0;
     }
     RETURN->v_float = bfdata->readPos;
 }
