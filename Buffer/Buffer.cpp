@@ -83,6 +83,7 @@ struct bufferData
     bool recLoop; // loop recording
     int recLeft;
     bool loop; // loop playback
+    int sampleRate;
 };
 
 CK_DLL_QUERY(buffer) 
@@ -187,6 +188,7 @@ CK_DLL_CTOR(buffer_ctor) // constructing the Buffer chugin
     bfdata->recLoop = false;
     bfdata->recLeft = bfdata->max;
     bfdata->sync = 0;
+    bfdata->sampleRate = (t_CKUINT)API->vm->get_srate();
     
     if (bfdata->buffer) delete [] bfdata->buffer; // delete if present.
     bfdata->buffer = new float[bfdata->max];      // allocate new memory
@@ -222,7 +224,7 @@ CK_DLL_TICK(buffer_tick)
     if (bfdata->wPos >= bfdata->max) bfdata->wPos = 0;
     
     if (bfdata->play) {
-        if (bfdata->sync == 1) bfdata->rate = (bfdata->max * clipf(in,-(g_srate/2.0),g_srate/2.0) / g_srate); // sync frequency to input
+        if (bfdata->sync == 1) bfdata->rate = (bfdata->max * clipf(in,-(bfdata->sampleRate/2.0),bfdata->sampleRate/2.0) / bfdata->sampleRate); // sync frequency to input
         
         if (bfdata->sync == 2) bfdata->readPos = wrapf((float) in,bfdata->max);  // sync readPos to input
         
@@ -331,7 +333,8 @@ CK_DLL_MFUN(buffer_frequency)
 {
     bufferData * bfdata = (bufferData *) OBJ_MEMBER_INT(SELF, buffer_data_offset);
     bfdata->frequency = GET_NEXT_FLOAT(ARGS);
-    bfdata->rate = (float) ((bfdata->frequency * bfdata->max) / g_srate);
+    //bfdata->rate = (float) bfdata->sampleRate / (bfdata->frequency * bfdata->max);
+    bfdata->rate = bfdata->frequency * (bfdata->max / (float) bfdata->sampleRate);
     RETURN->v_float = bfdata->frequency;
 }
 
