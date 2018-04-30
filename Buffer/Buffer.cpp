@@ -33,7 +33,7 @@ CK_DLL_MFUN(buffer_max); // setting size of delay
 CK_DLL_MFUN(buffer_rate); // set current delaytime
 CK_DLL_MFUN(buffer_interp); // to set interp
 CK_DLL_MFUN(buffer_sync); // the sync thing
-CK_DLL_MFUN(buffer_valueAt); // to set a value of the buffer directly
+CK_DLL_MFUN(buffer_valueAt); // to set a value of the buffer directly: index, float
 CK_DLL_MFUN(buffer_play); // play switch
 CK_DLL_MFUN(buffer_record); // rec switch
 CK_DLL_MFUN(buffer_loop); // loop playback ?
@@ -41,6 +41,7 @@ CK_DLL_MFUN(buffer_recLoop); // loop rec
 CK_DLL_MFUN(buffer_frequency); // frequency
 CK_DLL_MFUN(buffer_position); // position in buffer
 CK_DLL_MFUN(buffer_delay); // delaytime if sync = 3
+CK_DLL_MFUN(buffer_set);
 
 // getter functions:
 CK_DLL_MFUN(buffer_getMax); // setting size of delay
@@ -160,6 +161,9 @@ CK_DLL_QUERY(buffer)
     QUERY->add_mfun(QUERY, buffer_noise, "void", "noise"); // sets waveform to noise
     
     QUERY->add_mfun(QUERY, buffer_exp, "void", "exp"); // sets waveform to an exponential curve going from 0.00001 to 1.
+    
+    QUERY->add_mfun(QUERY, "float[]", "set", buffer_set ); //load table
+    QUERY->add_arg(QUERY, "float", "v[]" );
     
     buffer_data_offset = QUERY->add_mvar(QUERY, "int", "@data", false);
     
@@ -295,6 +299,14 @@ CK_DLL_MFUN(buffer_sinewave)
 }
 
 CK_DLL_MFUN(buffer_noise)
+{
+    bufferData * bfdata = (bufferData *) OBJ_MEMBER_INT(SELF, buffer_data_offset);
+    for (int i = 0; i < bfdata->max; i++) {
+        bfdata->buffer[i] = (((float)rand()/RAND_MAX) * 2.0) - 1.0;
+    }
+}
+
+CK_DLL_MFUN(buffer_set)
 {
     bufferData * bfdata = (bufferData *) OBJ_MEMBER_INT(SELF, buffer_data_offset);
     for (int i = 0; i < bfdata->max; i++) {

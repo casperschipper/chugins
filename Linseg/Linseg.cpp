@@ -144,6 +144,10 @@ CK_DLL_MFUN(linseg_duration)
 {
     linsegData * lsdata = (linsegData *) OBJ_MEMBER_INT(SELF, linseg_data_offset);
     lsdata->duration = (float) GET_NEXT_DUR(ARGS);
+    if (lsdata->duration == 0) {
+        lsdata->state = 0; // jump to value
+        lsdata->value = lsdata->target;
+    }
     if (lsdata->state == 1) lsdata->rate = fabs((lsdata->value-lsdata->target) / lsdata->duration);
     RETURN->v_dur = (t_CKDUR) lsdata->duration;
 }

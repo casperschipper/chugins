@@ -5,6 +5,7 @@
 
 #include <stdio.h>
 #include <limits.h>
+#include <math.h>
 
 
 CK_DLL_CTOR(Dust_ctor);
@@ -22,6 +23,7 @@ struct DustData
 {
     float probability;
     SAMPLE currentSample;
+    bool signalInput;
 };
 
 
@@ -55,6 +57,7 @@ CK_DLL_CTOR(Dust_ctor)
     
     DustData * dustdata = new DustData;
     dustdata->probability = 0.01;
+    dustdata->signalInput = false;
     
     OBJ_MEMBER_INT(SELF, Dust_data_offset) = (t_CKINT) dustdata;
 }
@@ -74,12 +77,16 @@ CK_DLL_TICK(Dust_tick)
 {
     DustData * dustdata = (DustData *) OBJ_MEMBER_INT(SELF, Dust_data_offset);
 
+    float probability = 0.;
+    
+    if (!dustdata->signalInput) { // ignore input
+        probability = dustdata->probability;
+        dustdata->signalInput = (in > 0); // if there is input, keep tracking it.
+    } else {
+        probability = fabs(in); //
+    }
 
-    // just add the parameter controlled one, so when no input is connected, probabality can also be set manually.
-    // take negative also as probability.
-    SAMPLE probability = abs(in) + dustdata->probability;
-
-    *out = ((float)rand()/RAND_MAX) * (probability > ((float)rand()/RAND_MAX));
+    *out = ((((float)rand()/RAND_MAX) * 2.0) -1.0) * (probability > ((float)rand()/RAND_MAX));
 
     return TRUE;
 }

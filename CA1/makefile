@@ -1,10 +1,10 @@
 
 # chugin name
-CHUGIN_NAME=Clip
+CHUGIN_NAME=CA1
 
 # all of the c/cpp files that compose this chugin
 C_MODULES=
-CXX_MODULES=Clip.cpp
+CXX_MODULES=CA1.cpp
 
 # where the chuck headers are
 CK_SRC_PATH?=../chuck/include/
