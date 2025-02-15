@@ -25,7 +25,6 @@ float wrapf(float x, float max)
     return fmod(x, max);
 }
 
-t_CKUINT g_srate;
 
 CK_DLL_CTOR(buffer_ctor); // constructor
 CK_DLL_DTOR(buffer_dtor); // deconstructor
@@ -88,8 +87,6 @@ struct bufferData
 
 CK_DLL_QUERY(buffer)
 {
-    g_srate = QUERY->srate;
-
     QUERY->setname(QUERY, "Buffer");
 
     QUERY->begin_class(QUERY, "Buffer", "UGen");
