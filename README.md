@@ -17,10 +17,9 @@ cd chugins
 ```
 To compile all chugins in this repository, run `make linux` (Linux) or `make osx` (macOS). Windows users can compile using the Visual Studio solution `chugins.sln`.
 
-Optionally, (Linux and macOS, requires administrative privileges) install the chugins:
-```
-sudo make install
-```
+```make mac```
+
+```sudo make install```
 
 ## Working with Chugins
 Chugins are loaded automatically when command-line **chuck** starts, or when **miniAudicle** starts the ChucK VM. Once loaded, the contents of chugins can be used directly from the language (see [class library documentation](https://chuck.stanford.edu/doc/reference/chugins.html) for the pre-packaged chugins).
