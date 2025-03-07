@@ -2,11 +2,11 @@
 
 These are a few chugins mostly aimed at non-standard synthesis
 
-Linseg (a line segment generator)
-Buffer (a read and write buffer with cubic implementation)
-Tanh (a softclip)
-Clip (a normal clip)
-DelayC (just a interpolated delay line, but with cubic interpolation)
+* Linseg (a line segment generator)
+* Buffer (a read and write buffer with cubic implementation)
+* Tanh (a softclip)
+* Clip (a normal clip)
+* DelayC (just a interpolated delay line, but with cubic interpolation)
 
 
 
