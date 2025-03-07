@@ -12,7 +12,7 @@ Binaries for most chugins in this repository are automatically included by the C
 ## Building ChuGins
 Clone this repository:
 ```
-git clone --recurse-submodules https://github.com/ccrma/chugins.git
+git clone --recurse-submodules https://github.com/casperschipper/chugins.git
 cd chugins
 ```
 To compile all chugins in this repository, run `make linux` (Linux) or `make osx` (macOS). Windows users can compile using the Visual Studio solution `chugins.sln`.
