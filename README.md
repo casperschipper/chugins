@@ -17,7 +17,7 @@ cd chugins
 ```
 To compile all chugins in this repository, run `make linux` (Linux) or `make osx` (macOS). Windows users can compile using the Visual Studio solution `chugins.sln`.
 
-```make mac```
+```make mac | linux | windows```
 
 ```sudo make install```
 
