@@ -307,7 +307,7 @@ CK_DLL_MFUN(buffer_noise)
     bufferData *bfdata = (bufferData *)OBJ_MEMBER_INT(SELF, buffer_data_offset);
     for (int i = 0; i < bfdata->max; i++)
     {
-        bfdata->buffer[i] = (((float)rand() / RAND_MAX) * 2.0) - 1.0;
+        bfdata->buffer[i] = (((float)rand() / (float) RAND_MAX) * 2.0f) - 1.0f;
     }
 }
 
